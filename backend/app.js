@@ -6,6 +6,7 @@ const errorHandler = require("./utils/errorHandler");
 const { SuccessResponse } = require("./utils/responseHandlers");
 const AuthRouter = require("./routes/auth.routes");
 const StockRouter = require("./routes/stock.routes");
+const watchlistRoutes = require("./routes/watchlist.routes");
 const authMiddleware = require("./middlewares/auth.middleware");
 const app = express();
 
@@ -28,7 +29,9 @@ app.get("/", (req, res) => {
   res.send("server is live");
 });
 app.use("/auth", AuthRouter);
-app.use("/stocks", authMiddleware, StockRouter);
+app.use("/stocks", StockRouter);
+app.use("/watchlist", watchlistRoutes);
+
 
 app.get("/health-check", (req, res) => {
   new SuccessResponse(res, "server is fine", [], 200, true);
