@@ -1,18 +1,32 @@
 const express = require("express");
-const cookieParser = require("cookie-parser")
+const morgan = require("morgan");
+const logger = require("./config/logger");
+const cookieParser = require("cookie-parser");
+const errorHandler = require("./utils/errorHandler");
+const { SuccessResponse } = require("./utils/responseHandlers");
 const app = express();
+
+const stream = {
+  write: (message) => logger.info(message.trim()),
+};
 
 // Middlewares
 app.use(express.json());
-app.use(cookieParser())
+app.use(morgan("dev", { stream }));
+app.use(cookieParser());
 // app.use(cors({
 //     origin:"",
 //     Credential:true
-// }))  // setup this later 
+// }))  // setup this later
 
+app.use(errorHandler);
 // Routes
 app.get("/", (req, res) => {
   res.send("server is live");
 });
+
+app.get("/health-check",(req,res)=>{
+  new SuccessResponse(res,"server is fine",[],200,true)
+})
 
 module.exports = app;
