@@ -1,3 +1,4 @@
+require("dotenv").config();
 const axios = require("axios");
 const logger = require("../config/logger");
 
@@ -18,7 +19,6 @@ const searchStocks = async (keyword) => {
         apikey: API_KEY,
       },
     });
-
     const matches = response.data.bestMatches || [];
 
     return matches.map((stock) => ({
@@ -27,7 +27,6 @@ const searchStocks = async (keyword) => {
       region: stock["4. region"],
       currency: stock["8. currency"],
     }));
-
   } catch (err) {
     logger.error(`Stock search failed: ${err.message}`);
     throw new Error("Failed to search stocks");
@@ -62,7 +61,6 @@ const getStockQuote = async (symbol) => {
       volume: Number(quote["06. volume"]),
       latestTradingDay: quote["07. latest trading day"],
     };
-
   } catch (err) {
     logger.error(`Stock quote failed (${symbol}): ${err.message}`);
     throw new Error("Failed to fetch stock quote");
@@ -80,13 +78,10 @@ const getBulkQuotes = async (symbolsArray = []) => {
     }
 
     const quotes = await Promise.allSettled(
-      symbolsArray.map((symbol) => getStockQuote(symbol))
+      symbolsArray.map((symbol) => getStockQuote(symbol)),
     );
 
-    return quotes
-      .filter((q) => q.status === "fulfilled")
-      .map((q) => q.value);
-
+    return quotes.filter((q) => q.status === "fulfilled").map((q) => q.value);
   } catch (err) {
     logger.error(`Bulk quotes failed: ${err.message}`);
     throw new Error("Failed to fetch bulk quotes");

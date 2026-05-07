@@ -5,6 +5,8 @@ const cookieParser = require("cookie-parser");
 const errorHandler = require("./utils/errorHandler");
 const { SuccessResponse } = require("./utils/responseHandlers");
 const AuthRouter = require("./routes/auth.routes");
+const StockRouter = require("./routes/stock.routes");
+const authMiddleware = require("./middlewares/auth.middleware");
 const app = express();
 
 const stream = {
@@ -26,6 +28,7 @@ app.get("/", (req, res) => {
   res.send("server is live");
 });
 app.use("/auth", AuthRouter);
+app.use("/stocks", authMiddleware, StockRouter);
 
 app.get("/health-check", (req, res) => {
   new SuccessResponse(res, "server is fine", [], 200, true);

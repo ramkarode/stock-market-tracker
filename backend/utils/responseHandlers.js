@@ -11,7 +11,7 @@ class SuccessResponse {
   }
 }
 class ErrorResponse {
-  constructor(res, message, data = {}, statusCode = 200, log = false) {
+  constructor(res, message, data = {}, statusCode = 500, log = false) {
     if (log) logger.error(message);
 
     return res.status(statusCode).json({
