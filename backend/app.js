@@ -4,6 +4,7 @@ const logger = require("./config/logger");
 const cookieParser = require("cookie-parser");
 const errorHandler = require("./utils/errorHandler");
 const { SuccessResponse } = require("./utils/responseHandlers");
+const AuthRouter = require("./routes/auth.routes");
 const app = express();
 
 const stream = {
@@ -24,9 +25,10 @@ app.use(errorHandler);
 app.get("/", (req, res) => {
   res.send("server is live");
 });
+app.use("/auth", AuthRouter);
 
-app.get("/health-check",(req,res)=>{
-  new SuccessResponse(res,"server is fine",[],200,true)
-})
+app.get("/health-check", (req, res) => {
+  new SuccessResponse(res, "server is fine", [], 200, true);
+});
 
 module.exports = app;

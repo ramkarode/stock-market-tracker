@@ -12,14 +12,14 @@ class SuccessResponse {
 }
 class ErrorResponse {
   constructor(res, message, data = {}, statusCode = 200, log = false) {
-    if (log) logger.info(message);
+    if (log) logger.error(message);
 
     return res.status(statusCode).json({
-      success: true,
+      success: false,
       message,
       data,
     });
   }
 }
 
-module.exports = { SuccessResponse };
+module.exports = { SuccessResponse, ErrorResponse };
