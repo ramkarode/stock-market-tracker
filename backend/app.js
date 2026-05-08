@@ -9,7 +9,7 @@ const StockRouter = require("./routes/stock.routes");
 const watchlistRoutes = require("./routes/watchlist.routes");
 const HoldingRouter = require("./routes/holding.routes");
 const authMiddleware = require("./middlewares/auth.middleware");
-const AlertRouter = require("./routes/alert.routes")
+const AlertRouter = require("./routes/alert.routes");
 const app = express();
 
 const stream = {
@@ -34,7 +34,7 @@ app.use("/auth", AuthRouter);
 app.use("/stocks", StockRouter);
 app.use("/watchlist", watchlistRoutes);
 app.use("/portfolio", HoldingRouter);
-app.use("/alert",AlertRouter)
+app.use("/alert", AlertRouter);
 
 app.get("/health-check", (req, res) => {
   new SuccessResponse(res, "server is fine", [], 200, true);
