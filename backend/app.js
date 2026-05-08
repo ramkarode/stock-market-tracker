@@ -10,6 +10,7 @@ const watchlistRoutes = require("./routes/watchlist.routes");
 const HoldingRouter = require("./routes/holding.routes");
 const authMiddleware = require("./middlewares/auth.middleware");
 const AlertRouter = require("./routes/alert.routes");
+const cors = require("cors");
 const app = express();
 
 const stream = {
@@ -20,10 +21,13 @@ const stream = {
 app.use(express.json());
 app.use(morgan("dev", { stream }));
 app.use(cookieParser());
-// app.use(cors({
-//     origin:"",
-//     Credential:true
-// }))  // setup this later
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    credentials: true,
+    allowedHeaders: ["Content-Type"],
+  }),
+); // setup this later
 
 app.use(errorHandler);
 // Routes
