@@ -10,6 +10,7 @@ const watchlistRoutes = require("./routes/watchlist.routes");
 const HoldingRouter = require("./routes/holding.routes");
 const authMiddleware = require("./middlewares/auth.middleware");
 const AlertRouter = require("./routes/alert.routes");
+const { alertTriggerFn } = require("./jobs/indicatorAlertjob");
 const cors = require("cors");
 const app = express();
 
@@ -25,10 +26,9 @@ app.use(
   cors({
     origin: "http://localhost:3000",
     credentials: true,
-    allowedHeaders: ["Content-Type","Authorization"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   }),
 ); // setup this later
-
 app.use(errorHandler);
 // Routes
 app.get("/", (req, res) => {
@@ -39,6 +39,7 @@ app.use("/stocks", StockRouter);
 app.use("/watchlist", watchlistRoutes);
 app.use("/portfolio", HoldingRouter);
 app.use("/alert", AlertRouter);
+// app.get("/test/trigger",alertTriggerFn) //alert trigger test api
 
 app.get("/health-check", (req, res) => {
   new SuccessResponse(res, "server is fine", [], 200, true);
