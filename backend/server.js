@@ -4,7 +4,7 @@ const dotenv = require("dotenv");
 const app = require("./app");
 const connectDB = require("./config/database");
 // const startCronJobs = require("./jobs/indicatorAlertjob"); //will test this later
-// const { initSocket } = require("./sockets/socket");
+const { initSocket } = require("./sockets/socket");
 const gracefulShutdown = require("./utils/gracefulShutdown");
 
 dotenv.config();
@@ -16,7 +16,7 @@ const startServer = async () => {
 
     const server = http.createServer(app);
 
-    // initSocket(server);
+    initSocket(server);
     // startCronJobs(); 
 
     const PORT = process.env.PORT || 5000;

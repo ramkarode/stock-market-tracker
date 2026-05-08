@@ -11,6 +11,8 @@ export const registerUser = async (userData) => {
 // LOGIN USER
 export const loginUser = async (userData) => {
   const response = await axiosInstance.post(apiEndPoints.login, userData);
+  const userId = response.data.data.user.id;
+  localStorage.setItem("userId", userId);
 
   return response.data;
 };
