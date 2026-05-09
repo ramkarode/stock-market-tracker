@@ -17,19 +17,14 @@ export async function middleware(request) {
   }
 
   try {
-    const cookie = request.headers.get("cookie");
 
     const response = await fetch(
       `${process.env.NEXT_PUBLIC_API_URL}/auth/verify-login`,
       {
         method: "GET",
-        headers: {
-          cookie: cookie || "",
-        },
+        credentials: "include",
       },
     );
-
-    
 
     const isLoggedIn = response.ok;
 

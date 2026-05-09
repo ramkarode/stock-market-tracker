@@ -6,9 +6,8 @@ const { SuccessResponse, ErrorResponse } = require("../utils/responseHandlers");
 const COOKIE_OPTIONS = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
-  sameSite: "none",
+  sameSite: "None",
   maxAge: 7 * 24 * 60 * 60 * 1000,
-  domain: "stock-market-tracker-nine.vercel.app",
 };
 
 /**
