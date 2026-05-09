@@ -5,8 +5,8 @@ const { SuccessResponse, ErrorResponse } = require("../utils/responseHandlers");
 
 const COOKIE_OPTIONS = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "None",
+  secure: true,
+  sameSite: "none",
   maxAge: 7 * 24 * 60 * 60 * 1000,
 };
 
