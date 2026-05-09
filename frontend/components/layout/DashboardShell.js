@@ -19,9 +19,9 @@ const DashboardShell = ({ children }) => {
   const socket = useSocket(userId); // Initialize the socket connection
 
   return (
-    <div className="min-h-screen bg-[#fafafa]">
+    <div className="min-h-screen max-w-5xl mx-auto bg-[#fafafa]">
       {/* TOP NAVBAR */}
-      {/* <Navbar /> */}
+      <Navbar />
 
       {/* MAIN CONTENT */}
       <main className="pb-24">{children}</main>

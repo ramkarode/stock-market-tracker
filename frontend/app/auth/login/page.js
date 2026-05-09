@@ -10,7 +10,6 @@ export default function LoginPage() {
         items-center
         justify-center
         bg-gray-100
-        px-4
       "
     >
       <LoginForm />

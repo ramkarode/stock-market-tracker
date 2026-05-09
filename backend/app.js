@@ -24,7 +24,7 @@ app.use(morgan("dev", { stream }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: "https://stock-market-tracker-nine.vercel.app",
+    origin: ["https://stock-market-tracker-nine.vercel.app", "http://localhost:3000"],
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],
   }),

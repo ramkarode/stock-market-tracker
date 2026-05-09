@@ -16,3 +16,16 @@ export const loginUser = async (userData) => {
 
   return response.data;
 };
+
+//logout
+export const logoutUser = async () => {
+  const response = await axiosInstance.post(apiEndPoints.logout);
+  return response.data;
+};
+
+//holding
+// buy socks
+export const buyStockApi = async (payload) => {
+  const response = await axiosInstance.post(apiEndPoints.buy_stocks, payload);
+  return response.data;
+};

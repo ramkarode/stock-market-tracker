@@ -22,9 +22,6 @@ const Button = ({
         font-semibold
         transition-all
         duration-300
-        bg-gradient-to-r
-        from-red-500
-        to-orange-500
         hover:scale-[1.02]
         hover:shadow-lg
         text-white

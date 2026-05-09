@@ -2,13 +2,7 @@
 
 import Link from "next/link";
 
-import {
-  ChartNoAxesCombined,
-  Eye,
-  Wallet,
-  Bell,
-  User,
-} from "lucide-react";
+import { ChartNoAxesCombined, Eye, Wallet, Bell, User } from "lucide-react";
 
 import { usePathname } from "next/navigation";
 
@@ -50,6 +44,8 @@ const Footer = () => {
   return (
     <footer
       className="
+      max-w-5xl
+      mx-auto
         fixed
         bottom-0
         left-0
@@ -67,8 +63,7 @@ const Footer = () => {
       {navItems.map((item, index) => {
         const Icon = item.icon;
 
-        const isActive =
-          pathname === item.path;
+        const isActive = pathname === item.path;
 
         return (
           <Link
@@ -82,22 +77,14 @@ const Footer = () => {
           >
             <Icon
               size={24}
-              className={
-                isActive
-                  ? "text-blue-500"
-                  : "text-gray-500"
-              }
+              className={isActive ? "text-blue-500" : "text-gray-500"}
             />
 
             <span
               className={`
                 text-xs
                 mt-1
-                ${
-                  isActive
-                    ? "text-blue-500"
-                    : "text-gray-500"
-                }
+                ${isActive ? "text-blue-500" : "text-gray-500"}
               `}
             >
               {item.title}

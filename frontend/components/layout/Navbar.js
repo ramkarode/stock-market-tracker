@@ -1,194 +1,77 @@
-"use client";
-
-import { useState } from "react";
-
-import {
-  Search,
-  Grid2X2,
-  X,
-} from "lucide-react";
+import { Confirm, Notify } from "notiflix";
+import React, { useEffect } from "react";
+import { logoutUser } from "../../services/apiCollections";
 
 const Navbar = () => {
-  const [showSearch, setShowSearch] =
-    useState(false);
+  const handleLogout = async () => {
+    try {
+      Confirm.show(
+        "Logout",
+        "are you sure to logout?",
+        "Logout",
+        "cancel",
+        async () => {
+          await logoutUser();
+          Notify.success("logout successfully");
+        },
+        () => {
+          Notify.info("logout aborted!");
+        },
+      );
+    } catch (error) {
+      console.log(error.message);
+      Notify.error("Something went wrong. Try again after some time.");
+    }
+  };
+
+  Confirm.init({
+    // backgroundColor: "black",
+    okButtonBackground: "red",
+    okButtonColor: "white",
+    cancelButtonBackground: "black",
+    cancelButtonColor: "white",
+  });
 
   return (
-    <header
-      className="
-        sticky
-        top-0
-        z-50
-        bg-white
-        border-b
-        border-gray-100
-      "
-    >
-      {/* TOP */}
-      <div
-        className="
-          flex
-          items-center
-          justify-between
-          px-5
-          py-4
-        "
-      >
-        {/* LEFT */}
-        <div className="flex items-center gap-3">
-          
-          <div
-            className="
-              w-12
-              h-12
-              rounded-full
-              bg-gradient-to-r
-              from-cyan-400
-              to-green-400
-            "
-          />
-
-          <h1
-            className="
-              text-2xl
-              font-semibold
-              text-[#44475b]
-            "
-          >
-            Stocks
-          </h1>
-        </div>
-
-
-
-        {/* RIGHT */}
-        <div className="flex items-center gap-4">
-
-          {/* SEARCH */}
-          <div
-            className={`
-              flex
-              items-center
-              overflow-hidden
-              transition-all
-              duration-300
-              bg-[#f5f7fb]
-              rounded-full
-
-              ${
-                showSearch
-                  ? "w-[240px] px-4 py-2"
-                  : "w-0"
-              }
-            `}
-          >
-            <input
-              type="text"
-              placeholder="Search stocks..."
-              className="
-                bg-transparent
-                outline-none
-                w-full
-                text-sm
-              "
-            />
-
-            <X
-              size={18}
-              className="
-                cursor-pointer
-                text-gray-500
-              "
-              onClick={() =>
-                setShowSearch(false)
-              }
-            />
+    <header className="bg-white border-b border-slate-100 sticky top-0 z-10">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between">
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center">
+            <svg
+              className="w-4 h-4 text-white"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2.5}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M3 13l4-4 4 4 4-6 4 4"
+              />
+            </svg>
           </div>
-
-
-
-          {/* SEARCH ICON */}
-          {!showSearch && (
-            <Search
-              size={24}
-              className="
-                text-[#44475b]
-                cursor-pointer
-              "
-              onClick={() =>
-                setShowSearch(true)
-              }
-            />
-          )}
-
-
-
-          {/* GRID */}
-          <Grid2X2
-            size={24}
-            className="
-              text-[#44475b]
-              cursor-pointer
-            "
-          />
-
-
-
-          {/* PROFILE */}
-          <div
-            className="
-              w-10
-              h-10
-              rounded-full
-              bg-gray-200
-            "
-          />
-        </div>
-      </div>
-
-
-
-      {/* MARKET STRIP */}
-      <div
-        className="
-          flex
-          items-center
-          gap-8
-          overflow-x-auto
-          px-5
-          py-3
-          text-sm
-          border-t
-          border-gray-100
-        "
-      >
-        <div className="flex items-center gap-2 whitespace-nowrap">
-          
-          <span className="font-semibold">
-            NIFTY 50
-          </span>
-
-          <span>24,154.60</span>
-
-          <span className="text-red-500">
-            -172.05
+          <span className="text-base font-bold text-slate-900 tracking-tight">
+            Stockr
           </span>
         </div>
 
-
-
-        <div className="flex items-center gap-2 whitespace-nowrap">
-          
-          <span className="font-semibold">
-            SENSEX
-          </span>
-
-          <span>77,248.75</span>
-
-          <span className="text-red-500">
-            -595.77
-          </span>
+        <div>
+          <button
+            onClick={handleLogout}
+            className="bg-red-600 px-4 py-1 rounded-md text-white "
+          >
+            Logout
+          </button>
         </div>
 
+        {/* {watchlist.length > 0 && (
+            <div className="flex items-center gap-2 text-sm text-slate-600">
+              <span className="text-xs bg-slate-100 text-slate-700 font-semibold px-2.5 py-1 rounded-full">
+                ★ {watchlist.length} watchlist
+              </span>
+            </div>
+          )} */}
       </div>
     </header>
   );

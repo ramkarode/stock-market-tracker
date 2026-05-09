@@ -10,7 +10,6 @@ export default function RegisterPage() {
         items-center
         justify-center
         bg-gray-100
-        px-4
       "
     >
       <RegisterForm />
