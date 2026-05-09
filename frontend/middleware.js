@@ -1,9 +1,9 @@
+import axios from "axios";
 import { NextResponse } from "next/server";
 
 export async function middleware(request) {
   const { pathname } = request.nextUrl;
 
-  // only check these routes
   const protectedRoutes = ["/dashboard"];
   const authRoutes = ["/auth/login", "/auth/register"];
 
@@ -17,27 +17,31 @@ export async function middleware(request) {
   }
 
   try {
+    // Get cookies from incoming request
+    const cookie = request.headers.get("cookie");
 
-    const response = await fetch(
+    const response = await axios.get(
       `${process.env.NEXT_PUBLIC_API_URL}/auth/verify-login`,
       {
-        method: "GET",
-        credentials: "include",
-      },
+        headers: {
+          cookie: cookie || "",
+        },
+        withCredentials: true,
+      }
     );
-    const data = await response.json();
-    console.log("Middleware auth check response:", data);
 
-    const isLoggedIn = response.ok;
+    console.log("Middleware auth check:", response.data);
 
-    // root route
+    const isLoggedIn = response.status === 200;
+
+    // Root route
     if (pathname === "/") {
       return NextResponse.redirect(
-        new URL(isLoggedIn ? "/dashboard" : "/auth/login", request.url),
+        new URL(isLoggedIn ? "/dashboard" : "/auth/login", request.url)
       );
     }
 
-    // protect dashboard
+    // Protect dashboard routes
     if (
       protectedRoutes.some((route) => pathname.startsWith(route)) &&
       !isLoggedIn
@@ -45,13 +49,18 @@ export async function middleware(request) {
       return NextResponse.redirect(new URL("/auth/login", request.url));
     }
 
-    // prevent auth pages after login
-    if (authRoutes.some((route) => pathname.startsWith(route)) && isLoggedIn) {
+    // Prevent auth pages after login
+    if (
+      authRoutes.some((route) => pathname.startsWith(route)) &&
+      isLoggedIn
+    ) {
       return NextResponse.redirect(new URL("/dashboard", request.url));
     }
 
     return NextResponse.next();
   } catch (error) {
+    console.log("Middleware auth error:", error?.response?.data || error);
+
     return NextResponse.redirect(new URL("/auth/login", request.url));
   }
 }
