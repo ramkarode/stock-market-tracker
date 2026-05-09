@@ -1,16 +1,14 @@
 const User = require("../models/user.model");
 const generateToken = require("../utils/generateToken");
 
-const {
-  SuccessResponse,
-  ErrorResponse,
-} = require("../utils/responseHandlers");
+const { SuccessResponse, ErrorResponse } = require("../utils/responseHandlers");
 
 const COOKIE_OPTIONS = {
   httpOnly: true,
   secure: process.env.NODE_ENV === "production",
-  sameSite: process.env.NODE_ENV === "production" ? "None" : "Lax",
+  sameSite: "none",
   maxAge: 7 * 24 * 60 * 60 * 1000,
+  domain: "stock-market-tracker-nine.vercel.app",
 };
 
 /**
@@ -27,13 +25,7 @@ const signup = async (req, res, next) => {
     const existingUser = await User.findOne({ email });
 
     if (existingUser) {
-      return new ErrorResponse(
-        res,
-        "User already exists",
-        {},
-        400,
-        true
-      );
+      return new ErrorResponse(res, "User already exists", {}, 400, true);
     }
 
     const user = await User.create({
@@ -57,9 +49,8 @@ const signup = async (req, res, next) => {
         },
       },
       201,
-      true
+      true,
     );
-
   } catch (err) {
     next(err);
   }
@@ -78,25 +69,13 @@ const login = async (req, res, next) => {
     const user = await User.findOne({ email }).select("+password");
 
     if (!user) {
-      return new ErrorResponse(
-        res,
-        "Invalid credentials",
-        {},
-        400,
-        true
-      );
+      return new ErrorResponse(res, "Invalid credentials", {}, 400, true);
     }
 
     const isMatch = await user.comparePassword(password);
 
     if (!isMatch) {
-      return new ErrorResponse(
-        res,
-        "Invalid credentials",
-        {},
-        400,
-        true
-      );
+      return new ErrorResponse(res, "Invalid credentials", {}, 400, true);
     }
 
     const token = generateToken(user._id);
@@ -114,9 +93,8 @@ const login = async (req, res, next) => {
         },
       },
       200,
-      true
+      true,
     );
-
   } catch (err) {
     next(err);
   }
@@ -132,14 +110,7 @@ const logout = async (req, res, next) => {
   try {
     res.clearCookie("token");
 
-    return new SuccessResponse(
-      res,
-      "Logout successful",
-      {},
-      200,
-      true
-    );
-
+    return new SuccessResponse(res, "Logout successful", {}, 200, true);
   } catch (err) {
     next(err);
   }
@@ -160,9 +131,8 @@ const verifyLogin = async (req, res, next) => {
         isAuthenticated: true,
         user: req.user,
       },
-      200
+      200,
     );
-
   } catch (err) {
     next(err);
   }
@@ -182,9 +152,8 @@ const getMe = async (req, res, next) => {
       {
         user: req.user,
       },
-      200
+      200,
     );
-
   } catch (err) {
     next(err);
   }
