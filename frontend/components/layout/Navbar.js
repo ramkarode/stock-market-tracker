@@ -24,13 +24,15 @@ const Navbar = () => {
     }
   };
 
-  Confirm.init({
-    // backgroundColor: "black",
-    okButtonBackground: "red",
-    okButtonColor: "white",
-    cancelButtonBackground: "black",
-    cancelButtonColor: "white",
-  });
+  useEffect(() => {
+    Confirm.init({
+      // backgroundColor: "black",
+      okButtonBackground: "red",
+      okButtonColor: "white",
+      cancelButtonBackground: "black",
+      cancelButtonColor: "white",
+    });
+  }, []);
 
   return (
     <header className="bg-white border-b border-slate-100 sticky top-0 z-10">
