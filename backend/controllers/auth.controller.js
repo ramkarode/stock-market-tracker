@@ -107,7 +107,7 @@ const login = async (req, res, next) => {
  */
 const logout = async (req, res, next) => {
   try {
-    res.clearCookie("token");
+    res.clearCookie("token", COOKIE_OPTIONS);
 
     return new SuccessResponse(res, "Logout successful", {}, 200, true);
   } catch (err) {
