@@ -25,6 +25,8 @@ export async function middleware(request) {
         credentials: "include",
       },
     );
+    const data = await response.json();
+    console.log("Middleware auth check response:", data);
 
     const isLoggedIn = response.ok;
 
