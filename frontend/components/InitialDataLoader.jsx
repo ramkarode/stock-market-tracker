@@ -6,8 +6,8 @@ import { socket } from "../socket/socket";
 
 const InitialDataLoader = () => {
   const dispatch = useDispatch();
-  const userId = localStorage.getItem("userId");
   useEffect(() => {
+    const userId = localStorage.getItem("userId");
     dispatch(verifyLoginAsync());
     socket.emit("register", userId);
 
