@@ -11,7 +11,9 @@ const InitialDataLoader = () => {
     dispatch(verifyLoginAsync());
     socket.emit("register", userId);
     socket.on("alert-triggered", (data) => {
-      toast.alert("An alert was triggered!");
+      toast.alert(
+        `alert triggered for ${data.data.stockSymbol} at price ${data.data.currentPrice}`,
+      );
       // setAlerts((prev) =>
       //   prev.map((alertItem) => {
       //     if (alertItem._id === data.data.alertId) {
