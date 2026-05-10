@@ -390,7 +390,7 @@ const AlertsPage = () => {
 
   useEffect(() => {
     socket.on("alert-triggered", (data) => {
-      alert(JSON.stringify(data));
+     
       setAlerts((prev) =>
         prev.map((alertItem) => {
           if (alertItem._id === data.data.alertId) {
