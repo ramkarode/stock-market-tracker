@@ -23,6 +23,17 @@ export const logoutUser = async () => {
   return response.data;
 };
 
+//verify login
+export const verifyLoginUser = async () => {
+  try {
+    const response = await axiosInstance.get(apiEndPoints.verifyLogin);
+    return response.data;
+  } catch (error) {
+    console.log(error.message);
+    throw new Error(error);
+  }
+};
+
 //holding
 // buy socks
 export const buyStockApi = async (payload) => {

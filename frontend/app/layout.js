@@ -3,6 +3,7 @@ import "./globals.css";
 import ReduxProvider from "@/redux/provider";
 
 import { Toaster } from "react-hot-toast";
+import InitialDataLoader from "@/components/InitialDataLoader";
 
 export const metadata = {
   title: "Stock Market App",
@@ -14,6 +15,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body>
         <ReduxProvider>
+          <InitialDataLoader />
           <Toaster position="top-right" />
 
           {children}

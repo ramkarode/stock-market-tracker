@@ -1,8 +1,10 @@
 import { Confirm, Notify } from "notiflix";
 import React, { useEffect } from "react";
 import { logoutUser } from "../../services/apiCollections";
+import { useRouter } from "next/navigation";
 
 const Navbar = () => {
+  const router = useRouter();
   const handleLogout = async () => {
     try {
       Confirm.show(
@@ -13,6 +15,7 @@ const Navbar = () => {
         async () => {
           await logoutUser();
           Notify.success("logout successfully");
+          router.push("/auth/login");
         },
         () => {
           Notify.info("logout aborted!");

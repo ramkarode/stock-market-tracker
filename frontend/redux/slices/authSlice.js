@@ -2,7 +2,12 @@
 "use client";
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { loginUser, registerUser } from "@/services/apiCollections";
+import {
+  loginUser,
+  logoutUser,
+  registerUser,
+  verifyLoginUser,
+} from "@/services/apiCollections";
 
 import toast from "react-hot-toast";
 
@@ -18,7 +23,7 @@ const initialState = {
   user: null,
   token: getToken(),
   isLoggedIn: false,
-  loading: false,
+  loading: true,
   error: null,
 };
 
@@ -44,6 +49,37 @@ export const login = createAsyncThunk(
   async (userData, thunkAPI) => {
     try {
       const response = await loginUser(userData);
+
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Login Failed",
+      );
+    }
+  },
+);
+
+// LOGOUT USER
+export const logoutAsync = createAsyncThunk(
+  "auth/logout",
+  async (_, thunkAPI) => {
+    try {
+      const response = await logoutUser();
+
+      return response;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Login Failed",
+      );
+    }
+  },
+);
+// verify login USER
+export const verifyLoginAsync = createAsyncThunk(
+  "auth/verify-login",
+  async (_, thunkAPI) => {
+    try {
+      const response = await verifyLoginUser();
 
       return response;
     } catch (error) {
@@ -122,6 +158,24 @@ const authSlice = createSlice({
         state.error = action.payload;
 
         toast.error(action.payload);
+      })
+      .addCase(logoutAsync.fulfilled, (state) => {
+        state.user = null;
+        state.token = null;
+        state.isLoggedIn = false;
+      })
+      .addCase(verifyLoginAsync.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(verifyLoginAsync.fulfilled, (state, action) => {
+        state.user = action.payload.data.user;
+        state.isLoggedIn = true;
+        state.loading = false;
+      })
+      .addCase(verifyLoginAsync.rejected, (state, action) => {
+        state.user = null;
+        state.loading = false;
+        state.isLoggedIn = false;
       });
   },
 });
