@@ -2,6 +2,7 @@
 import { useEffect, useState, useRef } from "react";
 import axiosInstance from "../../services/axiosInstance"; // adjust path as needed
 import { socket } from "../../socket/socket";
+import {toast} from "react-hot-toast";
 
 // ─────────────────────────────────────────────
 // Utility helpers
@@ -390,7 +391,7 @@ const AlertsPage = () => {
 
   useEffect(() => {
     socket.on("alert-triggered", (data) => {
-     
+     toast.alert("An alert was triggered!");
       setAlerts((prev) =>
         prev.map((alertItem) => {
           if (alertItem._id === data.data.alertId) {

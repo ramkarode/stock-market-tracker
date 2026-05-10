@@ -10,9 +10,26 @@ const InitialDataLoader = () => {
     const userId = localStorage.getItem("userId");
     dispatch(verifyLoginAsync());
     socket.emit("register", userId);
-
+    socket.on("alert-triggered", (data) => {
+      toast.alert("An alert was triggered!");
+      // setAlerts((prev) =>
+      //   prev.map((alertItem) => {
+      //     if (alertItem._id === data.data.alertId) {
+      //       return {
+      //         ...alertItem,
+      //         isTriggered: true,
+      //         currentPrice: data.data.currentPrice,
+      //         triggeredAt: data.data.triggeredAt,
+      //       };
+      //     } else {
+      //       return alertItem;
+      //     }
+      //   }),
+      // );
+    });
     return () => {
       socket.off("register");
+      socket.off("alert-triggered");
     };
   }, []);
 
