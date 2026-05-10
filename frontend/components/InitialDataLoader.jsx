@@ -3,6 +3,7 @@ import React, { useEffect } from "react";
 import { verifyLoginAsync } from "../redux/slices/authSlice";
 import { useDispatch } from "react-redux";
 import { socket } from "../socket/socket";
+import toast from "react-hot-toast";
 
 const InitialDataLoader = () => {
   const dispatch = useDispatch();
