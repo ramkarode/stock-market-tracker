@@ -1,6 +1,7 @@
-"use client"
+"use client";
 import { useEffect, useState, useRef } from "react";
 import axiosInstance from "../../services/axiosInstance"; // adjust path as needed
+import { socket } from "../../socket/socket";
 
 // ─────────────────────────────────────────────
 // Utility helpers
@@ -112,7 +113,15 @@ const DeleteButton = ({ onClick, loading }) => (
 // AlertCard
 // ─────────────────────────────────────────────
 const AlertCard = ({ alert, onDelete, deleting }) => {
-  const { _id, symbol, conditionType, targetPrice, isTriggered, triggeredAt, createdAt } = alert;
+  const {
+    _id,
+    symbol,
+    conditionType,
+    targetPrice,
+    isTriggered,
+    triggeredAt,
+    createdAt,
+  } = alert;
 
   return (
     <div
@@ -151,7 +160,13 @@ const AlertCard = ({ alert, onDelete, deleting }) => {
         {/* meta */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-1 text-xs">
           <div className="flex items-center gap-1.5 text-gray-400">
-            <svg className="w-3 h-3 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg
+              className="w-3 h-3 shrink-0"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
               <rect x="3" y="4" width="18" height="18" rx="2" />
               <line x1="16" y1="2" x2="16" y2="6" />
               <line x1="8" y1="2" x2="8" y2="6" />
@@ -161,7 +176,13 @@ const AlertCard = ({ alert, onDelete, deleting }) => {
           </div>
           {isTriggered && triggeredAt && (
             <div className="flex items-center gap-1.5 text-amber-500">
-              <svg className="w-3 h-3 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg
+                className="w-3 h-3 shrink-0"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
                 <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
                 <path d="M13.73 21a2 2 0 01-3.46 0" />
               </svg>
@@ -203,14 +224,20 @@ const StatsBar = ({ alerts }) => {
     <div className="flex items-center gap-3 flex-wrap">
       <div className="flex items-center gap-1.5 bg-white border border-gray-100 rounded-xl px-3 py-2 shadow-sm">
         <span className="w-2 h-2 rounded-full bg-sky-400" />
-        <span className="text-xs font-semibold text-gray-600">{active} Active</span>
+        <span className="text-xs font-semibold text-gray-600">
+          {active} Active
+        </span>
       </div>
       <div className="flex items-center gap-1.5 bg-white border border-amber-100 rounded-xl px-3 py-2 shadow-sm">
         <span className="w-2 h-2 rounded-full bg-amber-400" />
-        <span className="text-xs font-semibold text-gray-600">{triggered} Triggered</span>
+        <span className="text-xs font-semibold text-gray-600">
+          {triggered} Triggered
+        </span>
       </div>
       <div className="flex items-center gap-1.5 bg-white border border-gray-100 rounded-xl px-3 py-2 shadow-sm">
-        <span className="text-xs font-semibold text-gray-400">Total {alerts.length}</span>
+        <span className="text-xs font-semibold text-gray-400">
+          Total {alerts.length}
+        </span>
       </div>
     </div>
   );
@@ -222,7 +249,13 @@ const StatsBar = ({ alerts }) => {
 const EmptyState = () => (
   <div className="flex flex-col items-center justify-center py-20 text-center">
     <div className="w-16 h-16 rounded-2xl bg-gray-50 border border-gray-100 flex items-center justify-center mb-4">
-      <svg className="w-7 h-7 text-gray-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+      <svg
+        className="w-7 h-7 text-gray-300"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1.5"
+      >
         <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9" />
         <path d="M13.73 21a2 2 0 01-3.46 0" />
       </svg>
@@ -263,17 +296,27 @@ const Toast = ({ message, type, onClose }) => {
   return (
     <div
       className={`fixed bottom-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2.5 px-4 py-3 rounded-2xl shadow-lg text-sm font-semibold transition-all ${
-        type === "success"
-          ? "bg-gray-900 text-white"
-          : "bg-red-500 text-white"
+        type === "success" ? "bg-gray-900 text-white" : "bg-red-500 text-white"
       }`}
     >
       {type === "success" ? (
-        <svg className="w-4 h-4 text-emerald-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+        <svg
+          className="w-4 h-4 text-emerald-400"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+        >
           <polyline points="20 6 9 17 4 12" />
         </svg>
       ) : (
-        <svg className="w-4 h-4 text-red-200" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+        <svg
+          className="w-4 h-4 text-red-200"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2.5"
+        >
           <circle cx="12" cy="12" r="10" />
           <line x1="12" y1="8" x2="12" y2="12" />
           <line x1="12" y1="16" x2="12.01" y2="16" />
@@ -310,7 +353,8 @@ const AlertsPage = () => {
         else setError("Failed to load alerts.");
       })
       .catch((err) => {
-        if (err?.name === "CanceledError" || err?.code === "ERR_CANCELED") return;
+        if (err?.name === "CanceledError" || err?.code === "ERR_CANCELED")
+          return;
         setError(err?.response?.data?.message || "Something went wrong.");
       })
       .finally(() => setLoading(false));
@@ -327,7 +371,7 @@ const AlertsPage = () => {
   const handleDelete = async (id) => {
     setDeleting(id);
     try {
-      const res = await axiosInstance.delete(`/alerts/${id}`);
+      const res = await axiosInstance.delete(`/alert/${id}`);
       if (res.data?.success) {
         setAlerts((prev) => prev.filter((a) => a._id !== id));
         setToast({ message: "Alert removed", type: "success" });
@@ -343,6 +387,29 @@ const AlertsPage = () => {
       setDeleting(null);
     }
   };
+
+  useEffect(() => {
+    socket.on("alert-triggered", (data) => {
+      alert(JSON.stringify(data));
+      setAlerts((prev) =>
+        prev.map((alertItem) => {
+          if (alertItem._id === data.data.alertId) {
+            return {
+              ...alertItem,
+              isTriggered: true,
+              currentPrice: data.data.currentPrice,
+              triggeredAt: data.data.triggeredAt,
+            };
+          } else {
+            return alertItem;
+          }
+        }),
+      );
+    });
+    return () => {
+      socket.off("alert-triggered");
+    };
+  }, []);
 
   return (
     <div className="min-h-screen bg-[#f7f8fc] px-4 sm:px-6 py-6 pb-28">

@@ -10,6 +10,7 @@ const logger = require("../config/logger");
 
 // debug job service function  testing
 const alertTriggerFn = async () => {
+  console.log("Running alert checker cron");
   try {
     logger.info("Running alert checker cron");
 
@@ -156,7 +157,7 @@ const startCronJobs = () => {
   // ALERT CHECKER JOB
   // ================================
 
-  cron.schedule("*/5 * * * *", alertTriggerFn);
+  cron.schedule("*/1 * * * *", alertTriggerFn);
 
   // ================================
   // DAILY CRON JOB

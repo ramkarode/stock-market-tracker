@@ -31,8 +31,8 @@ const initSocket = (server) => {
       const sockets = userSocketMap.get(toUserId);
 
       if (sockets) {
-        sockets.forEach((sid) => {
-          io.to(sid).emit("receive_message", { message });
+        sockets.forEach((s_id) => {
+          io.to(s_id).emit("receive_message", { message });
         });
       }
     });
@@ -60,10 +60,10 @@ const getIO = () => io;
 
 const emitToUser = (userId, event, data) => {
   const sockets = userSocketMap.get(userId);
-
+  console.log(sockets, "sockets for user", userId);
   if (sockets) {
-    sockets.forEach((sid) => {
-      io.to(sid).emit(event, data);
+    sockets.forEach((s_id) => {
+      io.to(s_id).emit(event, data);
     });
   }
 };

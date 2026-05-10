@@ -12,6 +12,7 @@ const authMiddleware = require("./middlewares/auth.middleware");
 const AlertRouter = require("./routes/alert.routes");
 const { alertTriggerFn } = require("./jobs/indicatorAlertjob");
 const cors = require("cors");
+const { emitToUser } = require("./sockets/socket");
 const app = express();
 
 const stream = {
@@ -24,7 +25,10 @@ app.use(morgan("dev", { stream }));
 app.use(cookieParser());
 app.use(
   cors({
-    origin: ["https://stock-market-tracker-nine.vercel.app", "http://localhost:3000"],
+    origin: [
+      "https://stock-market-tracker-nine.vercel.app",
+      "http://localhost:3000",
+    ],
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],
   }),
@@ -40,7 +44,11 @@ app.use("/watchlist", watchlistRoutes);
 app.use("/portfolio", HoldingRouter);
 app.use("/alert", AlertRouter);
 // app.get("/test/trigger",alertTriggerFn) //alert trigger test api
-
+app.get("/alert-emmit", (req, res) => {
+  let userId = req.query.userId;
+  emitToUser(userId, "alertTriggered", { data: [], mess: "Alert triggered!" }); // Replace with actual user ID
+  res.send("emmiting alert event");
+});
 app.get("/health-check", (req, res) => {
   new SuccessResponse(res, "server is fine", [], 200, true);
 });
