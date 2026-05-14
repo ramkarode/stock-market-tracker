@@ -391,7 +391,7 @@ const AlertsPage = () => {
 
   useEffect(() => {
     socket.on("alert-triggered", (data) => {
-     toast.alert("An alert was triggered!");
+     toast.success("An alert was triggered!");
       setAlerts((prev) =>
         prev.map((alertItem) => {
           if (alertItem._id === data.data.alertId) {
