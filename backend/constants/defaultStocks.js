@@ -1,1 +1,1 @@
-module.exports = ["GOOGL"];
+module.exports = ["GOOGL", "AAPL", "MSFT", "TSLA", "NVDA"];

@@ -2,7 +2,7 @@
 import { useEffect, useState, useRef } from "react";
 import axiosInstance from "../../services/axiosInstance"; // adjust path as needed
 import { socket } from "../../socket/socket";
-import {toast} from "react-hot-toast";
+import { Notify } from "notiflix";
 
 // ─────────────────────────────────────────────
 // Utility helpers
@@ -391,7 +391,6 @@ const AlertsPage = () => {
 
   useEffect(() => {
     socket.on("alert-triggered", (data) => {
-    alert("An alert was triggered!")
       setAlerts((prev) =>
         prev.map((alertItem) => {
           if (alertItem._id === data.data.alertId) {
@@ -406,7 +405,14 @@ const AlertsPage = () => {
           }
         }),
       );
+      Notify.success(
+        "Alert triggered for " +
+          data.data.stockSymbol +
+          " at price " +
+          data.data.currentPrice,
+      );
     });
+
     return () => {
       socket.off("alert-triggered");
     };

@@ -136,7 +136,7 @@ function BuyModal({ item, onClose }) {
               }`}
             >
               <span>{isUp ? "▲" : "▼"}</span>
-              {item.changePercent?.replace("-", "")}
+              {/* {item.changePercent?.replace("-", "")} */}
             </span>
           </div>
           <p className="text-xs text-slate-400 mt-0.5">Current Market Price</p>
@@ -451,7 +451,7 @@ function AlertModal({ item, onClose }) {
               }`}
             >
               <span>{isUp ? "▲" : "▼"}</span>
-              {item.changePercent?.replace("-", "")}
+              {/* {item.changePercent?.replace("-", "")} */}
             </span>
           </div>
           <p className="text-xs text-slate-400 mt-0.5">Current Market Price</p>
@@ -780,7 +780,7 @@ function WatchlistTile({ item, onBuy, onAlert }) {
             }`}
           >
             <span>{isUp ? "▲" : "▼"}</span>
-            {item.changePercent?.replace("-", "")}
+            {/* {item?.changePercent?.replace("-", "")} */}
           </span>
 
           {/* price */}
@@ -947,7 +947,7 @@ export default function WatchlistPage() {
       abortController = new AbortController();
       fetchWatchlist(true);
       console.log("Watchlist updated");
-    }, 60000);
+    }, 30000);
 
     return () => {
       abortController.abort();

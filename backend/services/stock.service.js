@@ -2,9 +2,9 @@ require("dotenv").config();
 const axios = require("axios");
 const logger = require("../config/logger");
 
-const BASE_URL = "https://www.alphavantage.co/query";
+const BASE_URL = "https://finnhub.io/api/v1";
 
-const API_KEY = process.env.ALPHA_VANTAGE_API_KEY;
+const API_KEY = process.env.FINNHUB_API_KEY;
 
 /**
  * @function searchStocks
@@ -12,20 +12,20 @@ const API_KEY = process.env.ALPHA_VANTAGE_API_KEY;
  */
 const searchStocks = async (keyword) => {
   try {
-    const response = await axios.get(BASE_URL, {
+    const response = await axios.get(`${BASE_URL}/search`, {
       params: {
-        function: "SYMBOL_SEARCH",
-        keywords: keyword,
-        apikey: API_KEY,
+        q: keyword,
+        token: API_KEY,
       },
     });
-    const matches = response.data.bestMatches || [];
+
+    const matches = response.data.result || [];
 
     return matches.map((stock) => ({
-      symbol: stock["1. symbol"],
-      companyName: stock["2. name"],
-      region: stock["4. region"],
-      currency: stock["8. currency"],
+      symbol: stock.symbol,
+      companyName: stock.description,
+      type: stock.type,
+      displaySymbol: stock.displaySymbol,
     }));
   } catch (err) {
     logger.error(`Stock search failed: ${err.message}`);
@@ -39,27 +39,29 @@ const searchStocks = async (keyword) => {
  */
 const getStockQuote = async (symbol) => {
   try {
-    const response = await axios.get(BASE_URL, {
+    const response = await axios.get(`${BASE_URL}/quote`, {
       params: {
-        function: "GLOBAL_QUOTE",
         symbol,
-        apikey: API_KEY,
+        token: API_KEY,
       },
     });
 
-    const quote = response.data["Global Quote"];
+    const quote = response.data;
 
     if (!quote || Object.keys(quote).length === 0) {
       throw new Error("Quote not found");
     }
 
     return {
-      symbol: quote["01. symbol"],
-      price: Number(quote["05. price"]),
-      change: Number(quote["09. change"]),
-      changePercent: quote["10. change percent"],
-      volume: Number(quote["06. volume"]),
-      latestTradingDay: quote["07. latest trading day"],
+      symbol,
+      price: Number(quote.c), // Current price
+      change: Number(quote.d), // Change
+      changePercent: Number(quote.dp), // % change
+      high: Number(quote.h),
+      low: Number(quote.l),
+      open: Number(quote.o),
+      previousClose: Number(quote.pc),
+      timestamp: quote.t,
     };
   } catch (err) {
     logger.error(`Stock quote failed (${symbol}): ${err.message}`);
@@ -78,10 +80,12 @@ const getBulkQuotes = async (symbolsArray = []) => {
     }
 
     const quotes = await Promise.allSettled(
-      symbolsArray.map((symbol) => getStockQuote(symbol)),
+      symbolsArray.map((symbol) => getStockQuote(symbol))
     );
 
-    return quotes.filter((q) => q.status === "fulfilled").map((q) => q.value);
+    return quotes
+      .filter((q) => q.status === "fulfilled")
+      .map((q) => q.value);
   } catch (err) {
     logger.error(`Bulk quotes failed: ${err.message}`);
     throw new Error("Failed to fetch bulk quotes");
