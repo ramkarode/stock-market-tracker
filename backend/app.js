@@ -33,7 +33,6 @@ app.use(
     allowedHeaders: ["Content-Type", "Authorization"],
   }),
 ); // setup this later
-app.use(errorHandler);
 // Routes
 app.get("/", (req, res) => {
   res.send("server is live");
@@ -53,4 +52,5 @@ app.get("/health-check", (req, res) => {
   new SuccessResponse(res, "server is fine", [], 200, true);
 });
 
+app.use(errorHandler);
 module.exports = app;
